@@ -54,10 +54,17 @@ public class Person {
 		return "unrelated";
 	}
 	public ArrayList<String> listRelations(PeopleHash ph){
-		ArrayList<String> test = new ArrayList<String>();
-		return test;
+		ArrayList<String> relations = new ArrayList<String>();
+		ArrayList<String> ancestors = this.getAncestors(ph);
+		for (int i=0; i<ancestors.size(); i++){//for each ancestor, adds all descendants
+			relations.addAll(ph.lookupPerson(ancestors.get(i)).getDescendants(ph));
+		}		
+		return relations;
 	}
 	public boolean isRelatedBy (String relationship, String name, PeopleHash ph){
+		String temp= this.findRelation(name, ph);
+		if (relationship==temp)
+			return true;
 		return false;
 	}
 	public ArrayList<String> getAncestors (PeopleHash ph){
