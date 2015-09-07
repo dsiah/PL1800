@@ -2,16 +2,12 @@ import JFT.utils.*;
 
 public class FamilyTree {
 	public static void main(String[] args) {
-		System.out.println("HELLO");
-		
-		//Parser p = new Parser();
-		//p.scanLine();
-		
-		Person sid = new Person("Sid");
 		PeopleHash ph = new PeopleHash();
-		ph.addPerson("Sid", sid);
+		Parser p = new Parser(ph);
+		p.parse(); // will keep parsing until you enter Ctrl-D in terminal/console 
 		
-		System.out.println(ph.lookupPerson("Sid"));
-		System.out.println(ph.lookupPerson("Bob"));
+		//Person sid = new Person("Sid");
+		//ph.addPerson("Sid", sid);
+		//System.out.println(ph.lookupPerson("Sid"));
 	}
 }
