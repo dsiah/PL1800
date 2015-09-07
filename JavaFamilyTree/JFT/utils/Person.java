@@ -17,4 +17,27 @@ public class Person {
 	public String toString() {
 		return this.name;
 	}
+	public void marryTo(String name){
+		
+	}
+	public void addChild(String childName, String spouseName){
+		
+	}
+	public String findRelation(String name){
+		return "test";
+	}
+	public ArrayList<String> listRelations(){
+		ArrayList<String> test = new ArrayList<String>();
+		return test;
+	}
+	public boolean isRelatedBy (String relationship, String name){
+		return false;
+	}
+	
+	
+	
+	
+	
+	
+	
 }
