@@ -34,8 +34,23 @@ public class Person {
 		if (parents[0]==name || parents[1]==name)
 			return "parent";
 		//check for married
+		if (spouses.contains(name))
+			return "spouse";
+		//check if sibling
+		if (parents==ph.lookupPerson(name).parents)
+			return "siblings";
 		//check for ancestor
+		if (this.getAncestors(ph).contains(name))
+			return "ancestor";
 		//check for related
+		ArrayList<String> ancestors1=this.getAncestors(ph);
+		ArrayList<String> ancestors2=ph.lookupPerson(name).getAncestors(ph);
+		for (int i=0; i<ancestors1.size(); i++){
+			for (int j=0; j<ancestors2.size(); j++){
+				if (ancestors1.get(i)==ancestors2.get(j))
+					return "related";
+			}
+		}
 		return "unrelated";
 	}
 	public ArrayList<String> listRelations(PeopleHash ph){
@@ -45,7 +60,29 @@ public class Person {
 	public boolean isRelatedBy (String relationship, String name, PeopleHash ph){
 		return false;
 	}
-	
+	public ArrayList<String> getAncestors (PeopleHash ph){
+		ArrayList<String> ancestors  = new ArrayList<String>();
+		String parent1= ph.lookupPerson(this.toString()).parents[0];
+		String parent2= ph.lookupPerson(this.toString()).parents[1];
+		if (parent1!=null){ //if not adam and eve generation, ad the parents, and the parents ancestors
+			ancestors.addAll(ph.lookupPerson(parent1).getAncestors(ph));
+			ancestors.addAll(ph.lookupPerson(parent2).getAncestors(ph));
+			ancestors.add(parent1);
+			ancestors.add(parent2);
+		}
+		return ancestors;
+	}
+	public ArrayList<String> getDescendants(PeopleHash ph){
+		ArrayList<String> descendants  = new ArrayList<String>();
+		if (this.children.isEmpty()==false){
+			for (int i=0; i<children.size(); i++){//adds children's descendants
+				String tempName=children.get(i);
+				descendants.addAll(ph.lookupPerson(tempName).getDescendants(ph));
+			}	
+		}
+		descendants.addAll(this.children);//adds the children
+		return descendants;
+	}
 	
 	
 	
