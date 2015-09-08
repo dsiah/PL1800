@@ -1,5 +1,6 @@
 package JFT.utils;
 import JFT.utils.Person;
+
 import java.util.HashMap;
 
 public class PeopleHash {
@@ -12,5 +13,15 @@ public class PeopleHash {
 
 	public Person lookupPerson(String name) {
 		return ph.get(name);
+	}
+	
+	public String toString(){
+		//String allData = new String();
+		for (String key : ph.keySet()){
+			//System.out.println(key);
+			System.out.println(ph.get(key).toString());
+		}
+		return "done";
+		
 	}
 }

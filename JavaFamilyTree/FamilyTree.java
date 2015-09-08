@@ -10,6 +10,8 @@ public class FamilyTree {
 		
 		File f = new File("TestFiles/example1.txt");
 		
-		p.parse(f); // will keep parsing until you enter Ctrl-D in terminal/console 		
+		p.parse(f); // will keep parsing until you enter Ctrl-D in terminal/console 	
+		
+		ph.toString();
 	}
 }

@@ -17,7 +17,7 @@ public class Person {
 	
 	@Override
 	public String toString() {
-		return this.name + Arrays.toString(this.parents) + this.spouses.toString();
+		return this.name + Arrays.toString(this.parents) + this.spouses.toString() + this.children.toString();
 	}
 	
 	public void marryTo(String name, PeopleHash ph){
