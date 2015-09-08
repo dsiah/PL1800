@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Person {
 	String name;
-	boolean isTopLevel; // Adam or Eve Generation
+	public boolean isTopLevel; // Adam or Eve Generation
 	String[] parents = new String[2]; // Max Two parents
 	ArrayList<String> spouses  = new ArrayList<String>();
 	ArrayList<String> children = new ArrayList<String>();
@@ -21,8 +21,9 @@ public class Person {
 	}
 	
 	public void marryTo(String name, PeopleHash ph){
-		spouses.add(name);
-		ph.lookupPerson(name).spouses.add(name);
+		this.spouses.add(name); // this person adds name to their spouses
+		Person p2 = ph.lookupPerson(name); // find p2 object
+		p2.spouses.add(this.name); // p2 adds this to their spouses
 	}
 	
 	public void addChild(String childName, String spouseName, PeopleHash ph){
@@ -89,19 +90,21 @@ public class Person {
 	
 	public ArrayList<String> getAncestors (PeopleHash ph){
 		ArrayList<String> ancestors  = new ArrayList<String>();
+		//System.out.println(this.name);
+		//System.out.println(this.isTopLevel);
 		if (!this.isTopLevel) {
 			String parent1 = ph.lookupPerson(this.toString()).parents[0];
 			String parent2 = ph.lookupPerson(this.toString()).parents[1];
-			//if not adam and eve generation, add the parents, and the parents ancestors
-			if (parent1 != null) { 
-				ancestors.addAll(ph.lookupPerson(parent1).getAncestors(ph));
-				ancestors.addAll(ph.lookupPerson(parent2).getAncestors(ph));
-				ancestors.add(parent1);
-				ancestors.add(parent2);
-			}
+			ancestors.addAll(ph.lookupPerson(parent1).getAncestors(ph));
+			ancestors.addAll(ph.lookupPerson(parent2).getAncestors(ph));
+			ancestors.add(parent1);
+			ancestors.add(parent2);
+			ancestors.add(this.name);
+			return ancestors;
+		} else {
+			ancestors.add(this.name);
+			return ancestors;
 		}
-		
-		return ancestors;
 	}
 	
 	public ArrayList<String> getDescendants(PeopleHash ph){

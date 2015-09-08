@@ -52,14 +52,16 @@ public class Parser {
 	public void checkForPeople(String p1, String p2) {
 		if (ph.lookupPerson(p1) == null) {
 			Person parent1 = new Person(p1);
-			ph.addPerson(p1, parent1);
 			parent1.isTopLevel = true;
+			//System.out.println(p1 + " " + Boolean.toString(parent1.isTopLevel));
+			ph.addPerson(p1, parent1);
 		}
 		
 		if (ph.lookupPerson(p2) ==  null) {
 			Person parent2 = new Person(p2);
-			ph.addPerson(p2, parent2);
 			parent2.isTopLevel = true;
+			//System.out.println(p2 + " " + Boolean.toString(parent2.isTopLevel));
+			ph.addPerson(p2, parent2);
 		}
 	}
 	
