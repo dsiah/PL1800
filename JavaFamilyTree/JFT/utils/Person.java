@@ -1,7 +1,9 @@
 package JFT.utils;
 
-import java.util.ArrayList;
 import JFT.utils.PeopleHash;
+import java.util.Arrays;
+import java.util.ArrayList;
+
 public class Person {
 	String name;
 	boolean isTopLevel; // Adam or Eve Generation
@@ -15,17 +17,30 @@ public class Person {
 	
 	@Override
 	public String toString() {
-		return this.name;
+		return this.name + Arrays.toString(this.parents) + this.spouses.toString();
 	}
+	
 	public void marryTo(String name, PeopleHash ph){
 		spouses.add(name);
 		ph.lookupPerson(name).spouses.add(name);
-		
 	}
+	
 	public void addChild(String childName, String spouseName, PeopleHash ph){
+		if (checkMarriage(this.name, spouseName, ph) == false)
+			this.marryTo(spouseName, ph);
+			
 		children.add(childName);
 		ph.lookupPerson(spouseName).children.add(childName);
 	}
+	
+	public static boolean checkMarriage(String p1, String p2, PeopleHash ph) {
+		Person one = ph.lookupPerson(p1);
+		if (one.spouses.contains(p2))
+			return true;
+		else
+			return false;
+	}
+	
 	public String findRelation(String name, PeopleHash ph){
 		//check for child
 		if (children.contains(name))
@@ -53,32 +68,42 @@ public class Person {
 		}
 		return "unrelated";
 	}
+	
 	public ArrayList<String> listRelations(PeopleHash ph){
 		ArrayList<String> relations = new ArrayList<String>();
 		ArrayList<String> ancestors = this.getAncestors(ph);
-		for (int i=0; i<ancestors.size(); i++){//for each ancestor, adds all descendants
+		for (int i = 0; i < ancestors.size(); i++){//for each ancestor, adds all descendants
 			relations.addAll(ph.lookupPerson(ancestors.get(i)).getDescendants(ph));
 		}		
 		return relations;
 	}
+	
 	public boolean isRelatedBy (String relationship, String name, PeopleHash ph){
-		String temp= this.findRelation(name, ph);
-		if (relationship==temp)
+		String temp = this.findRelation(name, ph);
+		
+		if (relationship == temp)
 			return true;
+		
 		return false;
 	}
+	
 	public ArrayList<String> getAncestors (PeopleHash ph){
 		ArrayList<String> ancestors  = new ArrayList<String>();
-		String parent1= ph.lookupPerson(this.toString()).parents[0];
-		String parent2= ph.lookupPerson(this.toString()).parents[1];
-		if (parent1!=null){ //if not adam and eve generation, ad the parents, and the parents ancestors
-			ancestors.addAll(ph.lookupPerson(parent1).getAncestors(ph));
-			ancestors.addAll(ph.lookupPerson(parent2).getAncestors(ph));
-			ancestors.add(parent1);
-			ancestors.add(parent2);
+		if (!this.isTopLevel) {
+			String parent1 = ph.lookupPerson(this.toString()).parents[0];
+			String parent2 = ph.lookupPerson(this.toString()).parents[1];
+			//if not adam and eve generation, add the parents, and the parents ancestors
+			if (parent1 != null) { 
+				ancestors.addAll(ph.lookupPerson(parent1).getAncestors(ph));
+				ancestors.addAll(ph.lookupPerson(parent2).getAncestors(ph));
+				ancestors.add(parent1);
+				ancestors.add(parent2);
+			}
 		}
+		
 		return ancestors;
 	}
+	
 	public ArrayList<String> getDescendants(PeopleHash ph){
 		ArrayList<String> descendants  = new ArrayList<String>();
 		if (this.children.isEmpty()==false){
@@ -90,10 +115,6 @@ public class Person {
 		descendants.addAll(this.children);//adds the children
 		return descendants;
 	}
-	
-	
-	
-	
 	
 	
 }
