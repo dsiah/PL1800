@@ -49,6 +49,16 @@ public class Parser {
 			this.case4Operands(in[0], in[1], in[2], in[3]);
 	}
 	
+	public void checkForPeople(String p1) {
+		if (ph.lookupPerson(p1) == null) {
+			Person parent1 = new Person(p1);
+			parent1.isTopLevel = true;
+			//System.out.println(p1 + " " + Boolean.toString(parent1.isTopLevel));
+			ph.addPerson(p1, parent1);
+		}
+	}
+	
+	
 	public void checkForPeople(String p1, String p2) {
 		if (ph.lookupPerson(p1) == null) {
 			Person parent1 = new Person(p1);
@@ -75,23 +85,26 @@ public class Parser {
 	}
 	
 	public void case3Operands(String op1, String op2, String op3) {
-		checkForPeople(op2, op3); // check for people in PeopleHash and generate accordingly
 		String question = op1 + " " + op2 + " " + op3;
-		Person firstPerson = ph.lookupPerson(op2); // track first person
 		
 		switch (op1) {
 			case ("W"): // List-relationships in order 
-				
+				checkForPeople(op3);
+				Person firstPerson = ph.lookupPerson(op2);
+				// call the appropriate function for W here
 				break;
 			
 			case ("R"): // What-relationship question
-				String answer = firstPerson.findRelation(op3, ph) + "\n"; 
+				checkForPeople(op2, op3); // check for people in PeopleHash and generate accordingly
+				Person firstp = ph.lookupPerson(op2);
+				String answer = firstp.findRelation(op3, ph) + "\n"; 
 				System.out.println(question);
 				System.out.println(answer);
 				break;
 			
 			case ("E"): // Marriage Event
-				firstPerson.marryTo(op3, ph);
+				Person fp = ph.lookupPerson(op2);
+				fp.marryTo(op3, ph);
 				break;
 			
 			default:
@@ -101,12 +114,13 @@ public class Parser {
 	}
 	
 	public void case4Operands(String op1, String op2, String op3, String op4) {
-		checkForPeople(op2, op3, op4);
-		String question = op1 + " " + op2 + " " + op3 + " " + op4;
-		Person firstPerson = ph.lookupPerson(op2);
 		
 		switch(op1) {
 			case ("X"): // Is-Relationship Question
+				checkForPeople(op2, op4);
+				String question = op1 + " " + op2 + " " + op3 + " " + op4;
+				Person firstPerson = ph.lookupPerson(op2);
+				
 				boolean ans = firstPerson.isRelatedBy(op3, op4, ph);
 				String answer = (ans ? "Yes" : "No") + "\n";
 				System.out.println(question);
@@ -114,7 +128,10 @@ public class Parser {
 				break;
 			
 			case ("E"): // Birth Event
-				firstPerson.addChild(op4, op3, ph);
+				checkForPeople(op2, op3, op4);
+				Person firstp = ph.lookupPerson(op2);
+				
+				firstp.addChild(op4, op3, ph);
 				break;
 			
 			default:
