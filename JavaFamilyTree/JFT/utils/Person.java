@@ -27,11 +27,16 @@ public class Person {
 	}
 	
 	public void addChild(String childName, String spouseName, PeopleHash ph){
-		if (checkMarriage(this.name, spouseName, ph) == false)
+		if (checkMarriage(this.name, spouseName, ph) == false) {
+			//System.out.println("Marrying " + this.name + " to " + spouseName);
 			this.marryTo(spouseName, ph);
-			
-		children.add(childName);
-		ph.lookupPerson(spouseName).children.add(childName);
+		}
+
+		Person child = ph.lookupPerson(childName);
+		this.children.add(childName); // add child to this persons' children
+		ph.lookupPerson(spouseName).children.add(childName); // add child to spouses' children
+		child.parents[0] = this.name;
+		child.parents[1] = spouseName;
 	}
 	
 	public static boolean checkMarriage(String p1, String p2, PeopleHash ph) {
@@ -43,30 +48,40 @@ public class Person {
 	}
 	
 	public String findRelation(String name, PeopleHash ph){
-		//check for child
+		// check if child
 		if (children.contains(name))
 			return "child";
-		//check for parent
-		if (parents[0]==name || parents[1]==name)
-			return "parent";
+		
 		//check for married
-		if (spouses.contains(name))
+		if (this.spouses.contains(name))
 			return "spouse";
+		
+		// (TODO) Check for other cases where related and topLevel is the one passed in. 
+		if (this.isTopLevel)
+			return "unrelated";
+		
+		//check for parent
+		if (this.parents[0].equals(name) || this.parents[1].equals(name))
+			return "parent";
+		
 		//check if sibling
 		if (parents==ph.lookupPerson(name).parents)
 			return "siblings";
+		
 		//check for ancestor
 		if (this.getAncestors(ph).contains(name))
 			return "ancestor";
+		
 		//check for related
-		ArrayList<String> ancestors1=this.getAncestors(ph);
-		ArrayList<String> ancestors2=ph.lookupPerson(name).getAncestors(ph);
+		ArrayList<String> ancestors1 = this.getAncestors(ph);
+		ArrayList<String> ancestors2 = ph.lookupPerson(name).getAncestors(ph);
 		for (int i=0; i<ancestors1.size(); i++){
 			for (int j=0; j<ancestors2.size(); j++){
 				if (ancestors1.get(i)==ancestors2.get(j))
 					return "related";
 			}
 		}
+		
 		return "unrelated";
 	}
 	
@@ -81,20 +96,22 @@ public class Person {
 	
 	public boolean isRelatedBy (String relationship, String name, PeopleHash ph){
 		String temp = this.findRelation(name, ph);
-		
+		//System.out.println(temp);
 		if (relationship == temp)
 			return true;
 		
 		return false;
 	}
 	
+	// (TODO) Fix this method
 	public ArrayList<String> getAncestors (PeopleHash ph){
 		ArrayList<String> ancestors  = new ArrayList<String>();
-		//System.out.println(this.name);
-		//System.out.println(this.isTopLevel);
+
 		if (!this.isTopLevel) {
-			String parent1 = ph.lookupPerson(this.toString()).parents[0];
-			String parent2 = ph.lookupPerson(this.toString()).parents[1];
+			//System.out.println(this.name);
+			//System.out.println(Arrays.toString(this.parents));
+			String parent1 = this.parents[0];
+			String parent2 = this.parents[1];
 			ancestors.addAll(ph.lookupPerson(parent1).getAncestors(ph));
 			ancestors.addAll(ph.lookupPerson(parent2).getAncestors(ph));
 			ancestors.add(parent1);

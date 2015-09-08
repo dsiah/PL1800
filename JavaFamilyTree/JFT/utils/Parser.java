@@ -108,7 +108,8 @@ public class Parser {
 		switch(op1) {
 			case ("X"): // Is-Relationship Question
 				boolean ans = firstPerson.isRelatedBy(op3, op4, ph);
-				String answer = Boolean.toString(ans) + "\n";
+				String answer = (ans ? "Yes" : "No") + "\n";
+				System.out.println(question);
 				System.out.println(answer);
 				break;
 			
