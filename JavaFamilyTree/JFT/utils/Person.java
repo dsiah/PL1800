@@ -72,6 +72,10 @@ public class Person {
 		if (this.getAncestors(ph).contains(name))
 			return "ancestor";
 		
+		//checks relatives
+		if (this.getDescendants(ph).contains(name))
+			return "related";
+		
 		//System.out.println(this.getAncestors(ph));
 		
 		// (TODO) Need to fix
