@@ -2,7 +2,6 @@ package JFT.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Parser {
@@ -45,8 +44,10 @@ public class Parser {
 		
 		if (opNum == 3)
 			this.case3Operands(in[0], in[1], in[2]);
-		else
+		else if (opNum == 4)
 			this.case4Operands(in[0], in[1], in[2], in[3]);
+		else
+			return;
 	}
 	
 	public void checkForPeople(String p1) {
@@ -121,14 +122,17 @@ public class Parser {
 		
 		switch(op1) {
 			case ("X"): // Is-Relationship Question
-				checkForPeople(op2, op4);
 				String question = op1 + " " + op2 + " " + op3 + " " + op4;
-				Person firstPerson = ph.lookupPerson(op2);
 				
+				checkForPeople(op2, op4);
+				Person firstPerson = ph.lookupPerson(op2);
 				boolean ans = firstPerson.isRelatedBy(op3, op4, ph);
+				
 				String answer = (ans ? "Yes" : "No") + "\n";
+				
 				System.out.println(question);
 				System.out.println(answer);
+				
 				break;
 			
 			case ("E"): // Birth Event
