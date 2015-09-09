@@ -17,6 +17,7 @@ public class Parser {
 		s = new Scanner(System.in);
 		while(s.hasNextLine()) {
 			String line = s.nextLine();
+			line = line.toLowerCase();
 			String[] operands = line.split(" ");
 			determineCommand(operands);	
 		}
@@ -89,7 +90,7 @@ public class Parser {
 		String question = op1 + " " + op2 + " " + op3;
 		
 		switch (op1) {
-			case ("W"): // List-relationships in order 
+			case ("w"): // List-relationships in order 
 				
 				Person firstPerson = ph.lookupPerson(op3);
 				String relationship = op2;
@@ -99,7 +100,7 @@ public class Parser {
 				
 				break;
 			
-			case ("R"): // What-relationship question
+			case ("r"): // What-relationship question
 				checkForPeople(op2, op3); // check for people in PeopleHash and generate accordingly
 				Person firstp = ph.lookupPerson(op2);
 				String answer = firstp.findRelation(op3, ph) + "\n"; 
@@ -107,7 +108,7 @@ public class Parser {
 				System.out.println(answer);
 				break;
 			
-			case ("E"): // Marriage Event
+			case ("e"): // Marriage Event
 				Person fp = ph.lookupPerson(op2);
 				fp.marryTo(op3, ph);
 				break;
@@ -121,7 +122,7 @@ public class Parser {
 	public void case4Operands(String op1, String op2, String op3, String op4) {
 		
 		switch(op1) {
-			case ("X"): // Is-Relationship Question
+			case ("x"): // Is-Relationship Question
 				String question = op1 + " " + op2 + " " + op3 + " " + op4;
 				
 				checkForPeople(op2, op4);
@@ -135,7 +136,7 @@ public class Parser {
 				
 				break;
 			
-			case ("E"): // Birth Event
+			case ("e"): // Birth Event
 				checkForPeople(op2, op3, op4);
 				Person firstp = ph.lookupPerson(op2);
 				
