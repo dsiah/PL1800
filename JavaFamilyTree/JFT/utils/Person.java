@@ -70,7 +70,7 @@ public class Person {
 				return "sibling";
 		
 		// (TODO) Need to fix
-		if (isAncestor(ph, this.name, name))
+		if (isAncestor(ph, name))
 			return "ancestor";
 		
 		// (TODO) Need to fix
@@ -102,14 +102,23 @@ public class Person {
 	
 	public boolean isRelatedBy (String relationship, String name, PeopleHash ph){
 		String temp = this.findRelation(name, ph);
-
+ 
 		if (relationship.equals(temp))
 			return true;
+		if (relationship.equals("ancestor")){
+			if (temp.equals("parent"))
+				return true;
+		}
+		if (relationship.equals("relative")){
+			if (!temp.equals("unrelated")){
+				return true;
+			}
+		}
 		
 		return false;
 	}
 
-	public boolean isAncestor(PeopleHash ph, String name, String parent) {
+	public boolean isAncestor(PeopleHash ph, String name) {
 		if(this.isTopLevel) {
 			return false;
 		}
@@ -119,10 +128,10 @@ public class Person {
 		else if (this.parents[1].equals(name)) {
 			return true;
 		}
-		else if (this.isAncestor(ph, name, ph.lookupPerson(this.parents[0]).name)) {
+		else if (this.isAncestor(ph, ph.lookupPerson(this.parents[0]).name)) {
 			return true;
 		}
-		else if (this.isAncestor(ph, name, ph.lookupPerson(this.parents[1]).name)) {
+		else if (this.isAncestor(ph, ph.lookupPerson(this.parents[1]).name)) {
 			return true;
 		} else {
 			return false;
