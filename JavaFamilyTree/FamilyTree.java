@@ -12,6 +12,6 @@ public class FamilyTree {
 		
 		p.parse(f); // will keep parsing until you enter Ctrl-D in terminal/console 	
 		
-		ph.toString();
+		//ph.toString();
 	}
 }

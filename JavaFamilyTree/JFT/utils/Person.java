@@ -1,6 +1,7 @@
 package JFT.utils;
 
 import JFT.utils.PeopleHash;
+
 import java.util.Arrays;
 import java.util.ArrayList;
 
@@ -57,16 +58,20 @@ public class Person {
 			return "spouse";
 		
 		// (TODO) Check for other cases where related and topLevel is the one passed in. 
-		if (this.isTopLevel)
-			return "unrelated";
+		//if (this.isTopLevel)
+			//return "unrelated";
 		
 		//check for parent
-		if (this.parents[0].equals(name) || this.parents[1].equals(name))
-			return "parent";
+		if (!this.isTopLevel){
+			
+			if (this.parents[0].equals(name) || this.parents[1].equals(name))
+				return "parent";
+		}
 		
 		//check if sibling
-		if (parents==ph.lookupPerson(name).parents)
-			return "siblings";
+		if (!this.isTopLevel)
+			if ((this.parents[0].equals(ph.lookupPerson(name).parents[0]))&&this.parents[1].equals(ph.lookupPerson(name).parents[1]))
+				return "sibling";
 		
 		//check for ancestor
 		if (this.getAncestors(ph).contains(name))
@@ -97,7 +102,7 @@ public class Person {
 	public boolean isRelatedBy (String relationship, String name, PeopleHash ph){
 		String temp = this.findRelation(name, ph);
 		//System.out.println(temp);
-		if (relationship == temp)
+		if (relationship.equals(temp))
 			return true;
 		
 		return false;
@@ -112,8 +117,26 @@ public class Person {
 			//System.out.println(Arrays.toString(this.parents));
 			String parent1 = this.parents[0];
 			String parent2 = this.parents[1];
-			ancestors.addAll(ph.lookupPerson(parent1).getAncestors(ph));
-			ancestors.addAll(ph.lookupPerson(parent2).getAncestors(ph));
+			ancestors.addAll(ph.lookupPerson(parent1).getAncestorsRec(ancestors, ph));
+			ancestors.addAll(ph.lookupPerson(parent2).getAncestorsRec(ancestors, ph));
+			ancestors.add(parent1);
+			ancestors.add(parent2);
+			ancestors.add(this.name);
+		} else {
+			ancestors.add(this.name);
+			
+		}
+		return ancestors;
+	}
+	public ArrayList<String> getAncestorsRec (ArrayList<String> ancestors, PeopleHash ph){
+
+		if (!this.isTopLevel) {
+			//System.out.println(this.name);
+			//System.out.println(Arrays.toString(this.parents));
+			String parent1 = this.parents[0];
+			String parent2 = this.parents[1];
+			ancestors.addAll(ph.lookupPerson(parent1).getAncestorsRec(ancestors, ph));
+			ancestors.addAll(ph.lookupPerson(parent2).getAncestorsRec(ancestors, ph));
 			ancestors.add(parent1);
 			ancestors.add(parent2);
 			ancestors.add(this.name);
@@ -122,8 +145,20 @@ public class Person {
 			ancestors.add(this.name);
 			return ancestors;
 		}
+		
 	}
 	
+	public ArrayList<String> whoIs(String relationship, PeopleHash ph){
+		ArrayList<String> peopleList = new ArrayList<String>();
+		//iterate through peopleHash, checking each person, and if this.isRelatedBy(relationship, each)==true
+		//then add them to peopleList. 
+		for (String key : ph.ph.keySet()){
+			if(this.isRelatedBy(relationship, key, ph)==true){
+				peopleList.add(key);
+			}
+		}
+		return peopleList;
+	}
 	public ArrayList<String> getDescendants(PeopleHash ph){
 		ArrayList<String> descendants  = new ArrayList<String>();
 		if (this.children.isEmpty()==false){

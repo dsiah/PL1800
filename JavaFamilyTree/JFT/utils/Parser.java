@@ -2,6 +2,7 @@ package JFT.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 //import java.util.Arrays;
 import java.util.Scanner;
 
@@ -89,9 +90,13 @@ public class Parser {
 		
 		switch (op1) {
 			case ("W"): // List-relationships in order 
-				checkForPeople(op3);
-				Person firstPerson = ph.lookupPerson(op2);
-				// call the appropriate function for W here
+				
+				Person firstPerson = ph.lookupPerson(op3);
+				String relationship = op2;
+				System.out.println(question);
+				System.out.println(firstPerson.whoIs(relationship,ph));
+				System.out.println();
+				
 				break;
 			
 			case ("R"): // What-relationship question
