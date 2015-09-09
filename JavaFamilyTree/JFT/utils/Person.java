@@ -78,6 +78,14 @@ public class Person {
 		if (this.getDescendants(ph).contains(name))
 			return "related";
 		
+		
+		//more relative checks
+		ArrayList<String> ancestors1=this.getAncestors(ph);
+		ArrayList<String> ancestors2=(ph.lookupPerson(name).getAncestors(ph));
+		ancestors1.retainAll(ancestors2);
+		if (!ancestors1.isEmpty())
+			return "related";
+		
 		return "unrelated";
 	}
 	

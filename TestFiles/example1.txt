@@ -13,3 +13,4 @@ W ancestor Andrew
 X Bill relative Mary
 R Cathy Todd
 W relative Jean
+W relative Fred
