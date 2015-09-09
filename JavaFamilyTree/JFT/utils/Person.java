@@ -109,43 +109,32 @@ public class Person {
 	}
 	
 	// (TODO) Fix this method
-	public ArrayList<String> getAncestors (PeopleHash ph){
-		ArrayList<String> ancestors  = new ArrayList<String>();
-
-		if (!this.isTopLevel) {
-			//System.out.println(this.name);
-			//System.out.println(Arrays.toString(this.parents));
-			String parent1 = this.parents[0];
-			String parent2 = this.parents[1];
-			ancestors.addAll(ph.lookupPerson(parent1).getAncestorsRec(ancestors, ph));
-			ancestors.addAll(ph.lookupPerson(parent2).getAncestorsRec(ancestors, ph));
-			ancestors.add(parent1);
-			ancestors.add(parent2);
-			ancestors.add(this.name);
-		} else {
-			ancestors.add(this.name);
+	public ArrayList<String> getAncestors(PeopleHash ph){
+		ArrayList<String> ancestors = new ArrayList<String>();
+		if (this.isTopLevel) {
 			
 		}
-		return ancestors;
-	}
-	public ArrayList<String> getAncestorsRec (ArrayList<String> ancestors, PeopleHash ph){
-
-		if (!this.isTopLevel) {
-			//System.out.println(this.name);
-			//System.out.println(Arrays.toString(this.parents));
-			String parent1 = this.parents[0];
-			String parent2 = this.parents[1];
-			ancestors.addAll(ph.lookupPerson(parent1).getAncestorsRec(ancestors, ph));
-			ancestors.addAll(ph.lookupPerson(parent2).getAncestorsRec(ancestors, ph));
-			ancestors.add(parent1);
-			ancestors.add(parent2);
-			ancestors.add(this.name);
-			return ancestors;
-		} else {
-			ancestors.add(this.name);
-			return ancestors;
-		}
 		
+	}
+
+	public boolean isAncestor(String name, String p) {
+		if(this.isTopLevel) {
+			return false;
+		}
+		else if (this.parents[0].equals(name)) {
+			return true;
+		}
+		else if (this.parents[1].equals(name)) {
+			return true;
+		}
+		else if (this.isAncestor(name, this.parents[0])) {
+			return true;
+		}
+		else if (this.isAncestor(name, this.parents[1])) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	public ArrayList<String> whoIs(String relationship, PeopleHash ph){
