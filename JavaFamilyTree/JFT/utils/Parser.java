@@ -3,7 +3,6 @@ package JFT.utils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
-//import java.util.Arrays;
 import java.util.Scanner;
 
 public class Parser {
@@ -94,7 +93,7 @@ public class Parser {
 				Person firstPerson = ph.lookupPerson(op3);
 				String relationship = op2;
 				System.out.println(question);
-				System.out.println(firstPerson.whoIs(relationship,ph));
+				System.out.println(firstPerson.whoIs(relationship, ph));
 				System.out.println();
 				
 				break;

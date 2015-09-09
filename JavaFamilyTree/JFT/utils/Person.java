@@ -59,7 +59,6 @@ public class Person {
 		
 		//check for parent
 		if (!this.isTopLevel){
-			
 			if (this.parents[0].equals(name) || this.parents[1].equals(name))
 				return "parent";
 		}
@@ -69,9 +68,11 @@ public class Person {
 			if ((this.parents[0].equals(ph.lookupPerson(name).parents[0]))&&this.parents[1].equals(ph.lookupPerson(name).parents[1]))
 				return "sibling";
 		
-		// (TODO) Need to fix
-		if (isAncestor(ph, name))
+		// (TODO) Test the fuck out of this.
+		if (this.getAncestors(ph).contains(name))
 			return "ancestor";
+		
+		//System.out.println(this.getAncestors(ph));
 		
 		// (TODO) Need to fix
 		/*
@@ -88,36 +89,69 @@ public class Person {
 		return "unrelated";
 	}
 	
-	// (TODO) Need to fix
-	public ArrayList<String> listRelations(PeopleHash ph){
-		ArrayList<String> relations = new ArrayList<String>();
-		/*
-		ArrayList<String> ancestors = this.getAncestors(ph);
-		for (int i = 0; i < ancestors.size(); i++){//for each ancestor, adds all descendants
-			relations.addAll(ph.lookupPerson(ancestors.get(i)).getDescendants(ph));
-		}		
-		*/
-		return relations;
-	}
-	
 	public boolean isRelatedBy (String relationship, String name, PeopleHash ph){
 		String temp = this.findRelation(name, ph);
  
 		if (relationship.equals(temp))
 			return true;
-		if (relationship.equals("ancestor")){
+		
+		if (relationship.equals("ancestor")) {
 			if (temp.equals("parent"))
 				return true;
 		}
-		if (relationship.equals("relative")){
-			if (!temp.equals("unrelated")){
+		
+		if (relationship.equals("relative")) {
+			if (!temp.equals("unrelated")) {
 				return true;
 			}
 		}
 		
 		return false;
 	}
+	
+	public ArrayList<String> getAncestors(PeopleHash ph) {
+		ArrayList<String> ans = new ArrayList<String>();
+		
+		if (this.isTopLevel) {
+			ans.add(this.name);
+		} else {
+			Person parent1 = ph.lookupPerson(this.parents[0]);
+			Person parent2 = ph.lookupPerson(this.parents[1]);
+			
+			ans.add(parent1.name);
+			ans.add(parent2.name);
+			
+			parent1.getAncestors(ph, ans);
+			parent2.getAncestors(ph, ans);
+		}
+		
+		return ans;
+	}
 
+	public ArrayList<String> getAncestors(PeopleHash ph, ArrayList<String> ansCont) {
+		if (this.isTopLevel && ansCont.contains(this.name)) {
+			return ansCont;
+		} else if (this.isTopLevel && !ansCont.contains(this.name)) {
+			ansCont.add(this.name);
+		} else {
+			Person parent1 = ph.lookupPerson(this.parents[0]);
+			Person parent2 = ph.lookupPerson(this.parents[1]);
+			
+			if (!ansCont.contains(parent1.name)) {
+				ansCont.add(parent1.name);
+			}
+			
+			if (!ansCont.contains(parent2.name)) {
+				ansCont.add(parent2.name);
+			}
+			
+			parent1.getAncestors(ph, ansCont);
+			parent2.getAncestors(ph, ansCont);
+		}
+		
+		return ansCont;
+	}
+	
 	public boolean isAncestor(PeopleHash ph, String name) {
 		if(this.isTopLevel) {
 			return false;
@@ -143,7 +177,7 @@ public class Person {
 		//iterate through peopleHash, checking each person, and if this.isRelatedBy(relationship, each)==true
 		//then add them to peopleList. 
 		for (String key : ph.ph.keySet()){
-			if(this.isRelatedBy(relationship, key, ph)==true){
+			if(this.isRelatedBy(relationship, key, ph) == true){
 				peopleList.add(key);
 			}
 		}
