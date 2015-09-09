@@ -8,7 +8,7 @@ public class FamilyTree {
 		
 		Parser p = new Parser(ph);
 		
-		File f = new File("TestFiles/example1.txt");
+		File f = new File("TestFiles/testCases.txt");
 		
 		p.parse(f); // will keep parsing until you enter Ctrl-D in terminal/console 	
 		

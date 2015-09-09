@@ -8,7 +8,6 @@ W parent Pete
 X Bill sibling Pete
 X Bill sibling Fred
 R John Mary
-
 W ancestor Andrew
 X Bill relative Mary
 R Cathy Todd
