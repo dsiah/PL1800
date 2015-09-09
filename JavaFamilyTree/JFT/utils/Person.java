@@ -57,10 +57,6 @@ public class Person {
 		if (this.spouses.contains(name))
 			return "spouse";
 		
-		// (TODO) Check for other cases where related and topLevel is the one passed in. 
-		//if (this.isTopLevel)
-			//return "unrelated";
-		
 		//check for parent
 		if (!this.isTopLevel){
 			
@@ -73,11 +69,12 @@ public class Person {
 			if ((this.parents[0].equals(ph.lookupPerson(name).parents[0]))&&this.parents[1].equals(ph.lookupPerson(name).parents[1]))
 				return "sibling";
 		
-		//check for ancestor
-		if (this.getAncestors(ph).contains(name))
+		// (TODO) Need to fix
+		if (isAncestor(ph, this.name, name))
 			return "ancestor";
 		
-		//check for related
+		// (TODO) Need to fix
+		/*
 		ArrayList<String> ancestors1 = this.getAncestors(ph);
 		ArrayList<String> ancestors2 = ph.lookupPerson(name).getAncestors(ph);
 		for (int i=0; i<ancestors1.size(); i++){
@@ -86,38 +83,33 @@ public class Person {
 					return "related";
 			}
 		}
+		*/
 		
 		return "unrelated";
 	}
 	
+	// (TODO) Need to fix
 	public ArrayList<String> listRelations(PeopleHash ph){
 		ArrayList<String> relations = new ArrayList<String>();
+		/*
 		ArrayList<String> ancestors = this.getAncestors(ph);
 		for (int i = 0; i < ancestors.size(); i++){//for each ancestor, adds all descendants
 			relations.addAll(ph.lookupPerson(ancestors.get(i)).getDescendants(ph));
 		}		
+		*/
 		return relations;
 	}
 	
 	public boolean isRelatedBy (String relationship, String name, PeopleHash ph){
 		String temp = this.findRelation(name, ph);
-		//System.out.println(temp);
+
 		if (relationship.equals(temp))
 			return true;
 		
 		return false;
 	}
-	
-	// (TODO) Fix this method
-	public ArrayList<String> getAncestors(PeopleHash ph){
-		ArrayList<String> ancestors = new ArrayList<String>();
-		if (this.isTopLevel) {
-			
-		}
-		
-	}
 
-	public boolean isAncestor(String name, String p) {
+	public boolean isAncestor(PeopleHash ph, String name, String parent) {
 		if(this.isTopLevel) {
 			return false;
 		}
@@ -127,10 +119,10 @@ public class Person {
 		else if (this.parents[1].equals(name)) {
 			return true;
 		}
-		else if (this.isAncestor(name, this.parents[0])) {
+		else if (this.isAncestor(ph, name, ph.lookupPerson(this.parents[0]).name)) {
 			return true;
 		}
-		else if (this.isAncestor(name, this.parents[1])) {
+		else if (this.isAncestor(ph, name, ph.lookupPerson(this.parents[1]).name)) {
 			return true;
 		} else {
 			return false;
