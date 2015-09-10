@@ -101,9 +101,9 @@ public class Parser {
 				break;
 			
 			case ("r"): // What-relationship question
-				checkForPeople(op2, op3); // check for people in PeopleHash and generate accordingly
-				Person firstp = ph.lookupPerson(op2);
-				String answer = firstp.findRelation(op3, ph) + "\n"; 
+				checkForPeople(op3, op2); // check for people in PeopleHash and generate accordingly
+				Person firstp = ph.lookupPerson(op3);
+				String answer = firstp.findRelation(op2, ph) + "\n"; 
 				System.out.println(question);
 				System.out.println(answer);
 				break;
@@ -125,9 +125,9 @@ public class Parser {
 			case ("x"): // Is-Relationship Question
 				String question = op1 + " " + op2 + " " + op3 + " " + op4;
 				
-				checkForPeople(op2, op4);
-				Person firstPerson = ph.lookupPerson(op2);
-				boolean ans = firstPerson.isRelatedBy(op3, op4, ph);
+				checkForPeople(op4, op2);
+				Person firstPerson = ph.lookupPerson(op4);
+				boolean ans = firstPerson.isRelatedBy(op3, op2, ph);
 				
 				String answer = (ans ? "Yes" : "No") + "\n";
 				

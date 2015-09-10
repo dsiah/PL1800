@@ -46,11 +46,12 @@ public class Person {
 			return false;
 	}
 	
-	public String findRelation(String name, PeopleHash ph){
-		// Check if child
-		if (children.contains(name))
-			return "child";
-		
+	public String findRelation(String name, PeopleHash ph) {
+//		Not needed
+//		// Check if child
+//		if (children.contains(name))
+//			return "child";
+//		
 		// Check for married
 		if (this.spouses.contains(name))
 			return "spouse";
